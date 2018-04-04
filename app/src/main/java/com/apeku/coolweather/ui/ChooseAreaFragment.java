@@ -1,6 +1,7 @@
 package com.apeku.coolweather.ui;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apeku.coolweather.R;
+import com.apeku.coolweather.WeatherActivity;
 import com.apeku.coolweather.constant.Address;
 import com.apeku.coolweather.db.City;
 import com.apeku.coolweather.db.County;
@@ -97,16 +99,24 @@ public class ChooseAreaFragment extends Fragment {
                     case LEVEL_PROVINCE:
                         currentProvince=provinceList.get(position);
                         setLevel(LEVEL_CITY);
+                        notifyLevelChanged();
                         break;
                     case LEVEL_CITY:
                         currentCity = cityList.get(position);
                         setLevel(LEVEL_COUNTY);
+                        notifyLevelChanged();
+                        break;
+                    case LEVEL_COUNTY:
+                        String weatherId=countyList.get(position).getWeatherId();
+                        Intent intent=new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("weather_id",weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
                         break;
                     default:
                         break;
                 }
 
-                notifyLevelChanged();
 
             }
         });
@@ -151,7 +161,7 @@ public class ChooseAreaFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }else{
 
-            String address=Address.ADDRESS_MAIN+"/"+currentProvince.getProvinceCode()+"/"+currentCity.getCityCode();
+            String address=Address.AREA_MAIN +"/"+currentProvince.getProvinceCode()+"/"+currentCity.getCityCode();
             queryFromServer(address);
         }
 
@@ -177,7 +187,7 @@ public class ChooseAreaFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }else {
 
-            String address=Address.ADDRESS_MAIN+"/"+currentProvince.getProvinceCode();
+            String address=Address.AREA_MAIN +"/"+currentProvince.getProvinceCode();
             queryFromServer(address);
         }
 
@@ -195,7 +205,7 @@ public class ChooseAreaFragment extends Fragment {
             refreshDataString(provinceList);
             mAdapter.notifyDataSetChanged();
         }else{
-            String address= Address.ADDRESS_MAIN;
+            String address= Address.AREA_MAIN;
             queryFromServer(address);
         }
         Log.d(TAG, "onLevelProvince: ");

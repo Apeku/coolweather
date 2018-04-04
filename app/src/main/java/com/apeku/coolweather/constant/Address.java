@@ -6,5 +6,6 @@ package com.apeku.coolweather.constant;
 
 public class Address {
 
-    public static final String ADDRESS_MAIN="http://guolin.tech/api/china";
+    public static final String AREA_MAIN ="http://guolin.tech/api/china";
+    public static final String BING_PIC ="http://guolin.tech/api/bing_pic";
 }
